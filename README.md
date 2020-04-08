@@ -1,1 +1,1 @@
-# Kubernetes integrates jenkins
+# Jenkins integrates kubernetes
