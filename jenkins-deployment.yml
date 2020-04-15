@@ -1,7 +1,7 @@
 ---
 apiVersion: apps/v1
 kind: Deployment
-metadataa:
+metadata:
   name: jenkins-master
   namespace: kube-jenkins
   labels:
@@ -16,6 +16,7 @@ spec:
       labels:
         app: jenkins
     spec:
+      serviceAccount: jenkins
       containers:
       - name: jenkins
         image: jenkins/jenkins:lts-alpine
@@ -45,10 +46,15 @@ spec:
         - name: jenkinshome
           subPath: jenkins-master
           mountPath: /var/jenkins_home
+        - name: timezone
+          mountPath: /etc/localtime
       volumes:
       - name: jenkinshome
         persistentVolumeClaim:
           claimName: opspvc
+      - name: timezone
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Shanghai
 
 ---
 kind: Service
