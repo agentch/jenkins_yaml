@@ -1,0 +1,32 @@
+#!/usr/bin/env groovy
+podTemplate(containers: [
+		containerTemplate(
+			image: 'jenkinsci/jnlp-slave', 
+			name: 'jnlp', 
+			ttyEnabled: true, 
+			imagePullPolicy: 'always'
+			workingDir: '/home/jenkins')
+	], 
+	label: 'test', 
+	name: 'test', 
+	cloud: 'kubernetes', 
+	namespace: 'kube-jenkins', 
+	imagePullSecrets: [ 'test' ], 
+	serviceAccount: 'jenkins', 
+	volumes: [
+		nfsVolume(mountPath: '/home/jenkins/.m2', readOnly: false, serverAddress: '192.168.7.8', serverPath: '/data/nfs/maven_repository'),
+		hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'), 
+		hostPathVolume(hostPath: '/data/nfs/.kube', mountPath: '/home/jenkins/.kube')
+	]) {
+	node("test"){
+        stage("checkout"){
+            checkout scm
+        }
+        stage("package"){
+            // withMaven (maven: 'mvn') {
+                sh "mvn -v"
+                sh "mvn clean install -Dmaven.test.skip=true"
+            // }
+        }
+    }
+}
