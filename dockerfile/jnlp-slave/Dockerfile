@@ -34,3 +34,6 @@ RUN set -x \
 COPY kubectl ./kubectl
 RUN chmod +x kubectl \
  && mv ./kubectl /usr/local/bin/kubectl
+ 
+ #Switch user to jenkins
+ User jenkins
