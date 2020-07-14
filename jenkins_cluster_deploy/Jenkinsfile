@@ -4,7 +4,8 @@ podTemplate(containers: [
 			image: 'jenkinsci/jnlp-slave', 
 			name: 'jnlp', 
 			ttyEnabled: true, 
-			imagePullPolicy: 'always'
+			//imagePullPolicy: 'always',
+			alwaysPullImage: true, 
 			workingDir: '/home/jenkins')
 	], 
 	label: 'test', 
