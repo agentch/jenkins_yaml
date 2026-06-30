@@ -1,0 +1,31 @@
+name: Required Check Demo
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  required_check:
+    name: Required Check Demo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show files
+        run: |
+          echo "Current branch/ref: $GITHUB_REF"
+          echo "Commit: $GITHUB_SHA"
+          ls -la
+
+      - name: Validate text files
+        run: |
+          echo "Checking text files..."
+          find . -type f -name "*.txt" -print
+          echo "Demo check passed."
